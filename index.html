@@ -631,7 +631,8 @@ function openPay(k){
   const s=subs.find(s=>s.fbKey===k);
   document.getElementById('pay-title').textContent='📅 '+s.name;
   const sel=document.getElementById('pay-year');
-  sel.innerHTML=[NY-1,NY,NY+1].map(y=>`<option value="${y}"${y===NY?' selected':''}>${y}</option>`).join('');
+  const years=[];for(let y=2024;y<=2037;y++)years.push(y);
+  sel.innerHTML=years.map(y=>`<option value="${y}"${y===NY?' selected':''}>${y}</option>`).join('');
   document.getElementById('modal-pay').classList.remove('hidden');
   renderPayGrid();
 }
