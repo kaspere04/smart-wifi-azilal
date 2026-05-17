@@ -282,8 +282,8 @@ button,input,select{font-family:'Cairo',sans-serif}
       <div id="page-reports" class="hidden">
         <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
           <h2 style="font-weight:800;font-size:16px">📈 التقارير الشهرية</h2>
-          <select class="inp" id="report-month" style="width:auto" onchange="renderReports()"></select>
-          <select class="inp" id="report-year" style="width:auto" onchange="renderReports()"></select>
+          <select class="inp" id="report-month" style="width:auto" onchange="window.renderReports()"></select>
+          <select class="inp" id="report-year" style="width:auto" onchange="window.renderReports()"></select>
         </div>
         <div id="report-content"></div>
       </div>
@@ -292,7 +292,7 @@ button,input,select{font-family:'Cairo',sans-serif}
       <div id="page-history" class="hidden">
         <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
           <h2 style="font-weight:800;font-size:16px">🕒 سجل المدفوعات</h2>
-          <input class="inp" id="hist-search" placeholder="🔍 بحث بالاسم..." oninput="renderHistory()" style="flex:1;min-width:140px"/>
+          <input class="inp" id="hist-search" placeholder="🔍 بحث بالاسم..." oninput="window.renderHistory()" style="flex:1;min-width:140px"/>
         </div>
         <div id="history-content"></div>
       </div>
@@ -817,9 +817,11 @@ window.shareReceipt = function(){
 };
 
 // ── Reports ───────────────────────────────────────
-function renderReports(){
-  const m=+(document.getElementById('report-month')||{value:NM}).value;
-  const y=+(document.getElementById('report-year')||{value:NY}).value;
+window.renderReports = function renderReports(){
+  const rm=document.getElementById('report-month');
+  const ry=document.getElementById('report-year');
+  const m=rm?+rm.value:NM;
+  const y=ry?+ry.value:NY;
   const paidList=subs.filter(s=>!!getPay(s,y)[m]);
   const unpaidList=subs.filter(s=>!getPay(s,y)[m]);
   const collected=paidList.reduce((a,s)=>a+s.fee,0);
@@ -862,7 +864,7 @@ function renderReports(){
 }
 
 // ── History ───────────────────────────────────────
-function renderHistory(){
+window.renderHistory = function renderHistory(){
   const q=(document.getElementById('hist-search')||{}).value||'';
   let all=[];
   subs.forEach(s=>{
